@@ -1,51 +1,59 @@
-// Q120: Write a program to take a string input. Change it to sentence case.
+//Q124: Take two filenames from the user – a source file and a destination file. Copy all the content from the source file to the destination file using fgetc() and fputc().
 
 /*
 Sample Test Cases:
 Input 1:
-str = I am trying to build logic.
+Source File: source.txt (Content: Learning C File Handling)
 Output 1:
-I Am Trying To Build Logic
-
-Input 2:
-str = The classes are supposed to start early.
-Output 2:
-The Classes Are Supposed To Start Early.
-
-Input 3:
-str = We are going to look at 26 different test cases.
-Output 3:
-We Are Going To Look At 26 Different Test Cases.
+File copied successfully to destination.txt
 
 */
 
 #include <stdio.h>
-#include <ctype.h>
 
 int main()
 {
-    char str[1000];
-    int i;
+    FILE *source, *destination;
+    char sourceFile[100], destinationFile[100];
+    int ch;
 
-    printf("Enter a string: ");
-    fgets(str, sizeof(str), stdin);
+    // Take filenames from user
+    printf("Enter source filename: ");
+    scanf("%s", sourceFile);
 
-    // Capitalize first character
-    if(str[0] != '\0')
+    printf("Enter destination filename: ");
+    scanf("%s", destinationFile);
+
+    // Open source file in read mode
+    source = fopen(sourceFile, "r");
+
+    if(source == NULL)
     {
-        str[0] = toupper(str[0]);
+        printf("Source file not found!\n");
+        return 1;
     }
 
-    // Capitalize character after every space
-    for(i = 1; str[i] != '\0'; i++)
+    // Open destination file in write mode
+    destination = fopen(destinationFile, "w");
+
+    if(destination == NULL)
     {
-        if(str[i - 1] == ' ')
-        {
-            str[i] = toupper(str[i]);
-        }
+        printf("Unable to create destination file!\n");
+        fclose(source);
+        return 1;
     }
 
-    printf("Output:\n%s", str);
+    // Copy character by character
+    while((ch = fgetc(source)) != EOF)
+    {
+        fputc(ch, destination);
+    }
+
+    // Close both files
+    fclose(source);
+    fclose(destination);
+
+    printf("File copied successfully to %s\n", destinationFile);
 
     return 0;
 }
