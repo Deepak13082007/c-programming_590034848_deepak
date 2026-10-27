@@ -1,11 +1,12 @@
-// Q121: Write a C program that creates a text file named info.txt in write mode. The program should take the user’s name and age as input, and write them to the file using fprintf(). After writing, display a message confirming that the data was successfully saved.
+// Q125: Open an existing file in append mode and allow the user to enter a new line of text. Append the text at the end without overwriting existing content.
 
 /*
 Sample Test Cases:
 Input 1:
-Name: Rahul, Age: 23
+Existing File: data.txt (Content before execution: Hello world)
+User Input: This is appended text.
 Output 1:
-File created successfully! Data written to info.txt
+File updated successfully with appended text.
 
 */
 
@@ -14,34 +15,28 @@ File created successfully! Data written to info.txt
 int main()
 {
     FILE *fp;
-    char name[100];
-    int age;
+    char text[500];
 
-    // Open file in write mode
-    fp = fopen("info.txt", "w");
+    // Open file in append mode
+    fp = fopen("data.txt", "a");
 
-    // Check if file was created successfully
     if(fp == NULL)
     {
-        printf("Error creating file!\n");
+        printf("Unable to open file!\n");
         return 1;
     }
 
-    // Take input from user
-    printf("Enter your name: ");
-    scanf(" %[^\n]", name);
+    // Take text from user
+    printf("Enter text to append: ");
+    fgets(text, sizeof(text), stdin);
 
-    printf("Enter your age: ");
-    scanf("%d", &age);
-
-    // Write data into file
-    fprintf(fp, "Name: %s\n", name);
-    fprintf(fp, "Age: %d\n", age);
+    // Append text to the file
+    fprintf(fp, "\n%s", text);
 
     // Close the file
     fclose(fp);
 
-    printf("File created successfully! Data written to info.txt\n");
+    printf("File updated successfully with appended text.\n");
 
     return 0;
 }
