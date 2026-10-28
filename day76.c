@@ -1,12 +1,17 @@
-// Q122: Write a C program that opens an existing file (e.g., info.txt) and reads its contents using fgets(). The program should print all the lines to the console until EOF (end of file) is reached.
+// Q126: Ask the user for a filename. Check if it exists by trying to open it in read mode. If the file pointer is NULL, print an error message; otherwise, read and display its content.
 
 /*
 Sample Test Cases:
 Input 1:
-File: info.txt (Content: Name: Rahul\nAge: 23)
+Filename: sample.txt (File Exists: Yes)
 Output 1:
-Name: Rahul
-Age: 23
+File opened successfully.
+(Displays file content)
+
+Input 2:
+Filename: nofile.txt (File Exists: No)
+Output 2:
+Error: File does not exist!
 
 */
 
@@ -15,22 +20,30 @@ Age: 23
 int main()
 {
     FILE *fp;
-    char line[100];
+    char filename[100];
+    char ch;
 
-    // Open existing file in read mode
-    fp = fopen("info.txt", "r");
+    // Take filename from user
+    printf("Enter filename: ");
+    scanf("%s", filename);
+
+    // Try to open file in read mode
+    fp = fopen(filename, "r");
 
     // Check if file exists
     if(fp == NULL)
     {
-        printf("File not found!\n");
+        printf("Error: File does not exist!\n");
         return 1;
     }
 
-    // Read file line by line until EOF
-    while(fgets(line, sizeof(line), fp) != NULL)
+    printf("File opened successfully.\n");
+    printf("File content:\n");
+
+    // Read and display file content
+    while((ch = fgetc(fp)) != EOF)
     {
-        printf("%s", line);
+        printf("%c", ch);
     }
 
     // Close the file
