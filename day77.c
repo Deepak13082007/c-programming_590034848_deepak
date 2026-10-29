@@ -1,70 +1,53 @@
-// Q123: Read a text file and count the total number of characters, words, and lines. A word is defined as a sequence of non-space characters separated by spaces or newlines.
+// Q127: Write a program that reads text from input.txt, converts all lowercase letters to uppercase, and writes the result to output.txt.
 
 /*
 Sample Test Cases:
 Input 1:
-File: sample.txt (Content: Hello world\nThis is C programming)
+Input File (input.txt): Hello World\nC programming
 Output 1:
-Characters: 31
-Words: 5
-Lines: 2
+Output File (output.txt): HELLO WORLD\nC PROGRAMMING
 
 */
 
 #include <stdio.h>
+#include <ctype.h>
 
 int main()
 {
-    FILE *fp;
-    char ch;
-    int characters = 0;
-    int words = 0;
-    int lines = 0;
-    int inWord = 0;
+    FILE *input, *output;
+    int ch;
 
-    // Open file in read mode
-    fp = fopen("info.txt", "r");
+    // Open input file in read mode
+    input = fopen("input.txt", "r");
 
-    if(fp == NULL)
+    if(input == NULL)
     {
-        printf("File not found!\n");
+        printf("Error: input.txt does not exist!\n");
         return 1;
     }
 
-    // Read file character by character
-    while((ch = fgetc(fp)) != EOF)
+    // Open output file in write mode
+    output = fopen("output.txt", "w");
+
+    if(output == NULL)
     {
-        characters++;
-
-        // Count lines
-        if(ch == '\n')
-        {
-            lines++;
-        }
-
-        // Count words
-        if(ch == ' ' || ch == '\n' || ch == '\t')
-        {
-            inWord = 0;
-        }
-        else if(inWord == 0)
-        {
-            words++;
-            inWord = 1;
-        }
+        printf("Error: Unable to create output.txt!\n");
+        fclose(input);
+        return 1;
     }
 
-    // If file is not empty and last line has no '\n'
-    if(characters > 0)
+    // Read, convert and write character by character
+    while((ch = fgetc(input)) != EOF)
     {
-        lines++;
+        ch = toupper(ch);
+        fputc(ch, output);
     }
 
-    fclose(fp);
+    // Close both files
+    fclose(input);
+    fclose(output);
 
-    printf("Characters: %d\n", characters);
-    printf("Words: %d\n", words);
-    printf("Lines: %d\n", lines);
+    printf("Text converted to uppercase successfully!\n");
 
     return 0;
 }
